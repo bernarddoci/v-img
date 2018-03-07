@@ -164,7 +164,9 @@ export default {
     window.addEventListener('mousemove', () => {
       this.showUI();
     });
-    console.log('hellsdafaso');
+    window.addEventListener('touchstart', () => {
+      console.log('Touche start');
+    })
     
   },
 };

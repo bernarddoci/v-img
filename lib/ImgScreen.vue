@@ -164,6 +164,8 @@ export default {
     window.addEventListener('mousemove', () => {
       this.showUI();
     });
+    console.log('hellsdafaso');
+    
   },
 };
 </script>

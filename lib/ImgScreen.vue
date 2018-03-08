@@ -156,9 +156,12 @@ export default {
       }
     },
     handleswipe(isrightswipe){
-        if (isrightswipe)
+        console.log('Handle swipe')
+        if (isrightswipe){
+            console.log('Righ swipe');
             this.next();
-        else{
+        }else{
+            console.log('Left swipe');
             this.prev();
         }
     }
@@ -182,7 +185,7 @@ export default {
     });
 
     window.addEventListener('touchstart', (e) => {
-      console.log('Touche start');
+      console.log('Touch start');
         let touchobj = e.changedTouches[0];
         this.dist = 0
         this.startX = touchobj.pageX
@@ -201,7 +204,7 @@ export default {
         this.elapsedTime = new Date().getTime() - this.startTime // get time elapsed
         // check that elapsed time is within specified, horizontal dist traveled >= threshold, and vertical dist traveled <= 100
         let swiperightBol = (this.elapsedTime <= this.allowedTime && this.dist >= this.threshold && Math.abs(touchobj.pageY - this.startY) <= 100)
-        handleswipe(swiperightBol);
+        this.handleswipe(swiperightBol);
         e.preventDefault()
     }, false)
   },

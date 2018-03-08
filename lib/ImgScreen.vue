@@ -82,11 +82,14 @@ export default {
       uiTimeout: null,
       handlers: {},
       thumbnails: false,
+      swipedir: null,
       startX: null, 
       startY: null,
-      dist: null,
-      threshold: 150, 
-      allowedTime: 200,
+      distX: null,
+      distY: null,
+      threshold: 150, //required min distance traveled to be considered swipe
+      restraint: 100, // maximum distance allowed at the same time in perpendicular direction
+      allowedTime: 300, // maximum time allowed to travel that distance
       elapsedTime: null,
       startTime: null
     };
@@ -155,11 +158,14 @@ export default {
         }, 3500);
       }
     },
-    handleswipe(isrightswipe) {
-      if (isrightswipe) {
+    handleswipe(direction) {
+      console.log('Direction', direction);
+      if (direction == 'right') {
         this.next();
-      } else {
+      } else if(direction == 'left'){
         this.prev();
+      } else if(direction == 'up' || direction == 'down'){
+        return ;
       }
     }
   },
@@ -181,23 +187,29 @@ export default {
       this.showUI();
     });
     window.addEventListener('touchstart', (e) => {
-      let touchobj = e.changedTouches[0];
-      this.dist = 0
-      this.startX = touchobj.pageX
-      this.startY = touchobj.pageY
-      this.startTime = new Date().getTime()
-      // e.preventDefault()
+      var touchobj = e.changedTouches[0];
+      this.swipedir = 'none';
+      this.dist = 0;
+      this.startX = touchobj.pageX;
+      this.startY = touchobj.pageY;
+      this.startTime = new Date().getTime(); // record time when finger first makes contact with surface
     });
     window.addEventListener('touchmove', (e) => {
-      // e.preventDefault()
     });
     window.addEventListener('touchend', (e) => {
-      let touchobj = e.changedTouches[0]
-      this.dist = touchobj.pageX - this.startX 
+      var touchobj = e.changedTouches[0]
+      this.distX = touchobj.pageX - this.startX // get horizontal dist traveled by finger while in contact with surface
+      this.distY = touchobj.pageY - this.startY // get vertical dist traveled by finger while in contact with surface
       this.elapsedTime = new Date().getTime() - this.startTime // get time elapsed
-      let swiperightBol = (this.elapsedTime <= this.allowedTime && this.dist >= this.threshold && Math.abs(touchobj.pageY - this.startY) <= 100)
-      this.handleswipe(swiperightBol);
-      // e.preventDefault()
+      if (this.elapsedTime <= this.allowedTime){ // first condition for awipe met
+          if (Math.abs(this.distX) >= this.threshold && Math.abs(this.distY) <= this.restraint){ // 2nd condition for horizontal swipe met
+              this.swipedir = (this.distX < 0)? 'left' : 'right' // if dist traveled is negative, it indicates left swipe
+          }
+          else if (Math.abs(this.distY) >= this.threshold && Math.abs(this.distX) <= this.restraint){ // 2nd condition for vertical swipe met
+              this.swipedir = (this.distY < 0)? 'up' : 'down' // if dist traveled is negative, it indicates up swipe
+          }
+      }
+      this.handleswipe(this.swipedir);
     })
   }
 };

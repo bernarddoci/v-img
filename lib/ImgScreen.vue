@@ -82,6 +82,13 @@ export default {
       uiTimeout: null,
       handlers: {},
       thumbnails: false,
+      startX: null,
+      startY: null,
+      dist: null,
+      threshold: 150, //required min distance traveled to be considered swipe
+      allowedTime: 200, // maximum time allowed to travel that distance
+      elapsedTime: null,
+      startTime: null
     };
   },
   watch: {
@@ -148,6 +155,13 @@ export default {
         }, 3500);
       }
     },
+    handleswipe(isrightswipe){
+        if (isrightswipe)
+            this.next();
+        else{
+            this.prev();
+        }
+    }
   },
   created() {
     window.addEventListener('keyup', e => {
@@ -158,16 +172,38 @@ export default {
       // arrow left and 'h' key (vim-like binding)
       if (e.keyCode === 37 || e.keyCode === 72) this.prev();
     });
+
     window.addEventListener('scroll', () => {
       this.close();
     });
+
     window.addEventListener('mousemove', () => {
       this.showUI();
     });
-    window.addEventListener('touchstart', () => {
+
+    window.addEventListener('touchstart', (e) => {
       console.log('Touche start');
-    })
-    
+        let touchobj = e.changedTouches[0];
+        this.dist = 0
+        this.startX = touchobj.pageX
+        this.startY = touchobj.pageY
+        this.startTime = new Date().getTime() // record time when finger first makes contact with surface
+        e.preventDefault()
+    }, false);
+
+    window.addEventListener('touchmove', function(e){
+        e.preventDefault() // prevent scrolling when inside DIV
+    }, false);
+
+    window.addEventListener('touchend', function(e){
+        let touchobj = e.changedTouches[0]
+        this.dist = touchobj.pageX - this.startX // get total dist traveled by finger while in contact with surface
+        this.elapsedTime = new Date().getTime() - this.startTime // get time elapsed
+        // check that elapsed time is within specified, horizontal dist traveled >= threshold, and vertical dist traveled <= 100
+        let swiperightBol = (this.elapsedTime <= this.allowedTime && this.dist >= this.threshold && Math.abs(touchobj.pageY - this.startY) <= 100)
+        handleswipe(swiperightBol);
+        e.preventDefault()
+    }, false)
   },
 };
 </script>

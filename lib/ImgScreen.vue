@@ -81,7 +81,14 @@ export default {
       closed: true,
       uiTimeout: null,
       handlers: {},
-      thumbnails: false
+      thumbnails: false,
+      startX: null, 
+      startY: null,
+      dist: null,
+      threshold: 150, 
+      allowedTime: 200,
+      elapsedTime: null,
+      startTime: null
     };
   },
   watch: {
@@ -160,12 +167,6 @@ export default {
     }
   },
   created() {
-      let startX, startY,
-      dist,
-      threshold = 150, //required min distance traveled to be considered swipe
-      allowedTime = 200, // maximum time allowed to travel that distance
-      elapsedTime,
-      startTime;
     window.addEventListener('keyup', e => {
       // esc key and 'q' for quit
       if (e.keyCode === 27 || e.keyCode === 81) this.close();
@@ -183,10 +184,10 @@ export default {
     window.addEventListener('touchstart', (e) => {
       console.log('Touch start');
       let touchobj = e.changedTouches[0];
-      dist = 0
-      startX = touchobj.pageX
-      startY = touchobj.pageY
-      startTime = new Date().getTime()
+      this.dist = 0
+      this.startX = touchobj.pageX
+      this.startY = touchobj.pageY
+      this.startTime = new Date().getTime()
       // e.preventDefault()
     });
     window.addEventListener('touchmove', (e) => {
@@ -196,19 +197,13 @@ export default {
     window.addEventListener('touchend', (e) => {
       console.log('Touch end', this, e);
       let touchobj = e.changedTouches[0]
-      dist = touchobj.pageX - startX 
-      elapsedTime = new Date().getTime() - startTime // get time elapsed
+      this.dist = touchobj.pageX - this.startX 
+      this.elapsedTime = new Date().getTime() - this.startTime // get time elapsed
       
-      let swiperightBol = (elapsedTime <= allowedTime && dist >= threshold && Math.abs(touchobj.pageY - startY) <= 100)
+      let swiperightBol = (this.elapsedTime <= this.allowedTime && this.dist >= this.threshold && Math.abs(touchobj.pageY - this.startY) <= 100)
       console.log(touchobj);
-      console.log(elapsedTime, allowedTime, dist, threshold, startY);
-      if (swiperightBol) {
-        console.log('Right swipe');
-        this.next();
-      } else {
-        console.log('Left swipe');
-        this.prev();
-      }
+      console.log(this.elapsedTime, this.allowedTime, this.dist, this.threshold, this.startY);
+      this.handleswipe(swiperightBol);
       // e.preventDefault()
     })
   },

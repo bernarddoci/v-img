@@ -189,12 +189,12 @@ export default {
       startTime = new Date().getTime()
       e.preventDefault()
     });
-    window.addEventListener('touchmove', function(e){
+    window.addEventListener('touchmove', (e) => {
       console.log('Touch move');
       e.preventDefault()
     });
-    window.addEventListener('touchend', function(e){
-      console.log('Touch end');
+    window.addEventListener('touchend', (e) => {
+      console.log('Touch end', this, e);
       let touchobj = e.changedTouches[0]
       dist = touchobj.pageX - startX 
       elapsedTime = new Date().getTime() - startTime // get time elapsed

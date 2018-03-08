@@ -195,10 +195,12 @@ export default {
     }, false);
 
     window.addEventListener('touchmove', function(e){
+        console.log('Touch move');
         e.preventDefault() // prevent scrolling when inside DIV
     }, false);
 
     window.addEventListener('touchend', function(e){
+        console.log('Touch end');
         let touchobj = e.changedTouches[0]
         this.dist = touchobj.pageX - this.startX // get total dist traveled by finger while in contact with surface
         this.elapsedTime = new Date().getTime() - this.startTime // get time elapsed

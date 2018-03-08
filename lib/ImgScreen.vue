@@ -81,14 +81,7 @@ export default {
       closed: true,
       uiTimeout: null,
       handlers: {},
-      thumbnails: false,
-      startX: null,
-      startY: null,
-      dist: null,
-      threshold: 150, //required min distance traveled to be considered swipe
-      allowedTime: 200, // maximum time allowed to travel that distance
-      elapsedTime: null,
-      startTime: null
+      thumbnails: false
     };
   },
   watch: {
@@ -167,6 +160,12 @@ export default {
     }
   },
   created() {
+      let startX, startY,
+      dist,
+      threshold = 150, //required min distance traveled to be considered swipe
+      allowedTime = 200, // maximum time allowed to travel that distance
+      elapsedTime,
+      startTime;
     window.addEventListener('keyup', e => {
       // esc key and 'q' for quit
       if (e.keyCode === 27 || e.keyCode === 81) this.close();
@@ -184,10 +183,10 @@ export default {
     window.addEventListener('touchstart', (e) => {
       console.log('Touch start');
       let touchobj = e.changedTouches[0];
-      this.dist = 0
-      this.startX = touchobj.pageX
-      this.startY = touchobj.pageY
-      this.startTime = new Date().getTime() // record time when finger first makes contact with surface
+      dist = 0
+      startX = touchobj.pageX
+      startY = touchobj.pageY
+      startTime = new Date().getTime() // record time when finger first makes contact with surface
       e.preventDefault()
     }, false);
     window.addEventListener('touchmove', function(e){
@@ -197,11 +196,11 @@ export default {
     window.addEventListener('touchend', function(e){
       console.log('Touch end');
       let touchobj = e.changedTouches[0]
-      this.dist = touchobj.pageX - this.startX // get total dist traveled by finger while in contact with surface
-      this.elapsedTime = new Date().getTime() - this.startTime // get time elapsed
+      dist = touchobj.pageX - startX // get total dist traveled by finger while in contact with surface
+      elapsedTime = new Date().getTime() - startTime // get time elapsed
       // check that elapsed time is within specified, horizontal dist traveled >= threshold, and vertical dist traveled <= 100
-      let swiperightBol = (this.elapsedTime <= this.allowedTime && this.dist >= this.threshold && Math.abs(touchobj.pageY - this.startY) <= 100)
-      console.log(this.elapsedTime, this.allowedTime, this.dist, this.threshold, this.startY);
+      let swiperightBol = (elapsedTime <= allowedTime && dist >= threshold && Math.abs(touchobj.pageY - startY) <= 100)
+      console.log(elapsedTime, allowedTime, dist, threshold, startY);
       if (swiperightBol) {
         console.log('Righ swipe');
         this.next();

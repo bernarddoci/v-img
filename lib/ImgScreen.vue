@@ -285,7 +285,7 @@ export default {
 }
 
 .footer-v-img img.is-selected {
-  transform: scale(2.1);
+  transform: scale(1.1);
 }
 
 .footer-v-img img:not(:last-child) {

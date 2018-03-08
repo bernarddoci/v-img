@@ -89,7 +89,7 @@ export default {
       distY: null,
       threshold: 150, //required min distance traveled to be considered swipe
       restraint: 100, // maximum distance allowed at the same time in perpendicular direction
-      allowedTime: 300, // maximum time allowed to travel that distance
+      allowedTime: 700, // maximum time allowed to travel that distance
       elapsedTime: null,
       startTime: null
     };
@@ -160,13 +160,11 @@ export default {
     },
     handleswipe(direction) {
       console.log('Direction', direction);
-      if (direction == 'right') {
-        this.next();
-      } else if(direction == 'left'){
-        this.prev();
-      } else if(direction == 'up' || direction == 'down'){
-        return ;
-      }
+      if (direction == 'right' || direction == 'up') {
+          this.prev();
+        } else if(direction == 'left' || direction == 'down'){
+          this.next();
+      } 
     }
   },
   created() {

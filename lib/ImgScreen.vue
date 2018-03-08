@@ -187,11 +187,11 @@ export default {
       startX = touchobj.pageX
       startY = touchobj.pageY
       startTime = new Date().getTime()
-      e.preventDefault()
+      // e.preventDefault()
     });
     window.addEventListener('touchmove', (e) => {
       console.log('Touch move');
-      e.preventDefault()
+      // e.preventDefault()
     });
     window.addEventListener('touchend', (e) => {
       console.log('Touch end', this, e);
@@ -209,7 +209,7 @@ export default {
         console.log('Left swipe');
         this.prev();
       }
-      e.preventDefault()
+      // e.preventDefault()
     })
   },
 };

@@ -186,30 +186,31 @@ export default {
       dist = 0
       startX = touchobj.pageX
       startY = touchobj.pageY
-      startTime = new Date().getTime() // record time when finger first makes contact with surface
+      startTime = new Date().getTime()
       e.preventDefault()
-    }, false);
+    });
     window.addEventListener('touchmove', function(e){
       console.log('Touch move');
-      e.preventDefault() // prevent scrolling when inside DIV
-    }, false);
+      e.preventDefault()
+    });
     window.addEventListener('touchend', function(e){
       console.log('Touch end');
       let touchobj = e.changedTouches[0]
-      dist = touchobj.pageX - startX // get total dist traveled by finger while in contact with surface
+      dist = touchobj.pageX - startX 
       elapsedTime = new Date().getTime() - startTime // get time elapsed
-      // check that elapsed time is within specified, horizontal dist traveled >= threshold, and vertical dist traveled <= 100
+      
       let swiperightBol = (elapsedTime <= allowedTime && dist >= threshold && Math.abs(touchobj.pageY - startY) <= 100)
+      console.log(touchobj);
       console.log(elapsedTime, allowedTime, dist, threshold, startY);
       if (swiperightBol) {
-        console.log('Righ swipe');
+        console.log('Right swipe');
         this.next();
       } else {
         console.log('Left swipe');
         this.prev();
       }
       e.preventDefault()
-    }, false)
+    })
   },
 };
 </script>

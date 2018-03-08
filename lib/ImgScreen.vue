@@ -156,12 +156,9 @@ export default {
       }
     },
     handleswipe(isrightswipe) {
-      console.log('Handle swipe')
       if (isrightswipe) {
-        console.log('Righ swipe');
         this.next();
       } else {
-        console.log('Left swipe');
         this.prev();
       }
     }
@@ -182,7 +179,6 @@ export default {
       this.showUI();
     });
     window.addEventListener('touchstart', (e) => {
-      console.log('Touch start');
       let touchobj = e.changedTouches[0];
       this.dist = 0
       this.startX = touchobj.pageX
@@ -191,18 +187,14 @@ export default {
       // e.preventDefault()
     });
     window.addEventListener('touchmove', (e) => {
-      console.log('Touch move');
       // e.preventDefault()
     });
     window.addEventListener('touchend', (e) => {
-      console.log('Touch end', this, e);
       let touchobj = e.changedTouches[0]
       this.dist = touchobj.pageX - this.startX 
       this.elapsedTime = new Date().getTime() - this.startTime // get time elapsed
       
       let swiperightBol = (this.elapsedTime <= this.allowedTime && this.dist >= this.threshold && Math.abs(touchobj.pageY - this.startY) <= 100)
-      console.log(touchobj);
-      console.log(this.elapsedTime, this.allowedTime, this.dist, this.threshold, this.startY);
       this.handleswipe(swiperightBol);
       // e.preventDefault()
     })

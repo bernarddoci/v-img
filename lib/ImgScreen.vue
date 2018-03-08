@@ -155,15 +155,15 @@ export default {
         }, 3500);
       }
     },
-    handleswipe(isrightswipe){
-        console.log('Handle swipe')
-        if (isrightswipe){
-            console.log('Righ swipe');
-            this.next();
-        }else{
-            console.log('Left swipe');
-            this.prev();
-        }
+    handleswipe(isrightswipe) {
+      console.log('Handle swipe')
+      if (isrightswipe) {
+        console.log('Righ swipe');
+        this.next();
+      } else {
+        console.log('Left swipe');
+        this.prev();
+      }
     }
   },
   created() {
@@ -175,39 +175,34 @@ export default {
       // arrow left and 'h' key (vim-like binding)
       if (e.keyCode === 37 || e.keyCode === 72) this.prev();
     });
-
     window.addEventListener('scroll', () => {
       this.close();
     });
-
     window.addEventListener('mousemove', () => {
       this.showUI();
     });
-
     window.addEventListener('touchstart', (e) => {
       console.log('Touch start');
-        let touchobj = e.changedTouches[0];
-        this.dist = 0
-        this.startX = touchobj.pageX
-        this.startY = touchobj.pageY
-        this.startTime = new Date().getTime() // record time when finger first makes contact with surface
-        e.preventDefault()
+      let touchobj = e.changedTouches[0];
+      this.dist = 0
+      this.startX = touchobj.pageX
+      this.startY = touchobj.pageY
+      this.startTime = new Date().getTime() // record time when finger first makes contact with surface
+      e.preventDefault()
     }, false);
-
     window.addEventListener('touchmove', function(e){
-        console.log('Touch move');
-        e.preventDefault() // prevent scrolling when inside DIV
+      console.log('Touch move');
+      e.preventDefault() // prevent scrolling when inside DIV
     }, false);
-
     window.addEventListener('touchend', function(e){
-        console.log('Touch end');
-        let touchobj = e.changedTouches[0]
-        this.dist = touchobj.pageX - this.startX // get total dist traveled by finger while in contact with surface
-        this.elapsedTime = new Date().getTime() - this.startTime // get time elapsed
-        // check that elapsed time is within specified, horizontal dist traveled >= threshold, and vertical dist traveled <= 100
-        let swiperightBol = (this.elapsedTime <= this.allowedTime && this.dist >= this.threshold && Math.abs(touchobj.pageY - this.startY) <= 100)
-        this.handleswipe(swiperightBol);
-        e.preventDefault()
+      console.log('Touch end');
+      let touchobj = e.changedTouches[0]
+      this.dist = touchobj.pageX - this.startX // get total dist traveled by finger while in contact with surface
+      this.elapsedTime = new Date().getTime() - this.startTime // get time elapsed
+      // check that elapsed time is within specified, horizontal dist traveled >= threshold, and vertical dist traveled <= 100
+      let swiperightBol = (this.elapsedTime <= this.allowedTime && this.dist >= this.threshold && Math.abs(touchobj.pageY - this.startY) <= 100)
+      this.handleswipe(swiperightBol);
+      e.preventDefault()
     }, false)
   },
 };

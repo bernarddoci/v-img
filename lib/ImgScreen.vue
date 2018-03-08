@@ -87,9 +87,9 @@ export default {
       startY: null,
       distX: null,
       distY: null,
-      threshold: 150, //required min distance traveled to be considered swipe
+      threshold: 100, //required min distance traveled to be considered swipe
       restraint: 100, // maximum distance allowed at the same time in perpendicular direction
-      allowedTime: 700, // maximum time allowed to travel that distance
+      allowedTime: 600, // maximum time allowed to travel that distance
       elapsedTime: null,
       startTime: null
     };
